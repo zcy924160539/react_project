@@ -11,7 +11,7 @@ import { message } from 'antd'
 
 export default function ajax(url, data = {}, type = 'GET') {
   return new Promise((resolve) => {// 外层包的自创promise对象
-    let promise
+    let promise // 这个promise变量用来接收axios发请求返回的promise对象,然后统一处理请求异常
     // 1. 执行异步ajax请求
     if (type === 'GET') {
       promise = axios.get(url, {
