@@ -29,7 +29,7 @@ export default class Category extends Component {
         title: '操作',
         width: 300, // 指定宽度
         // render返回需要显示的界面
-        render: (category) => ( // category是分类列表的当前点击项
+        render: category => ( // category是分类列表的当前点击项
           <span>
             {/* 利用showUpdate方法,把当前分类对象category存储到组件对象(this)中 */}
             <LinkButton onClick={() => this.showUpdate(category)}>修改分类</LinkButton>

@@ -11,16 +11,29 @@ const BASE = '' // 空串代表从当前地址(http://localhost:3000)去向服�
 export const reqLogin = (username, password) => ajax(BASE + '/login', { username, password }, 'POST')
 
 // 添加用户的请求函数
-export const reqAddUser = (user) => ajax(BASE + '/manage/user/add', user, 'POST')
+export const reqAddUser = user => ajax(BASE + '/manage/user/add', user, 'POST')
 
 // 获取分类列表的接口
-export const reqCategory = (parentId) => ajax(BASE + '/manage/category/list', { parentId })
+export const reqCategory = parentId => ajax(BASE + '/manage/category/list', { parentId })
 
 // 添加分类的接口
 export const reqAddCategory = (parentId, categoryName) => ajax(BASE + '/manage/category/add', { parentId, categoryName }, 'POST')
 
 // 更新分类的接口
-export const reqUpdateCategory = ({categoryId, categoryName}) => ajax(BASE + '/manage/category/update', { categoryId, categoryName }, 'POST')
+export const reqUpdateCategory = ({ categoryId, categoryName }) => ajax(BASE + '/manage/category/update', { categoryId, categoryName }, 'POST')
+
+// 获取商品分页列表
+export const reqProducts = (pageNum, pageSize) => ajax(BASE + '/manage/product/list', { pageNum, pageSize })
+
+// 根据商品名称或商品描述来搜索商品分页列表
+// searchType:搜索类型，productName/productDesc
+export const reqSearchProducts = ({ pageNum, pageSize, searchName, searchType }) => ajax(BASE + '/manage/product/search', { pageNum, pageSize, [searchType]: searchName })
+
+// 根据分类ID获取分类
+export const reqCategorys = categoryId => ajax(BASE + '/manage/category/info', { categoryId })
+
+// 对商品进行上下架处理
+export const reqUpdateStatus = (productId, status) => ajax(BASE + '/manage/product/updateStatus', { productId, status }, 'POST')
 
 // jsonp请求的接口函数
 export const reqWeather = (city) => {

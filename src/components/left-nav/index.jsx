@@ -23,7 +23,7 @@ class LeftNav extends Component {
       } else { // 有子菜单
         const path = this.props.location.pathname
         // 查找一个与当前路径匹配的子item
-        const cItem = item.children.find(cItem => cItem.key === path)
+        const cItem = item.children.find(cItem => path.indexOf(cItem.key) === 0) // str.indexOf(str2) === 0 str1以str2开头
         if (cItem) {// cItem如果存在,说明当前item的子列表需要打开
           this.openKey = item.key
         }
@@ -51,7 +51,10 @@ class LeftNav extends Component {
   }
   render() {
     // 得到当前请求路径
-    const path = this.props.location.pathname
+    let path = this.props.location.pathname
+    if (path.indexOf('/product') === 0) { // 当前请求的是商品或商品的子路由  str.indexOf(str2) === 0 str1以str2开头
+      path = '/product'
+    }
     // console.log('render()', path)
     return (
       <div>
