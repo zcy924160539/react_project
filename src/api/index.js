@@ -14,7 +14,7 @@ export const reqLogin = (username, password) => ajax(BASE + '/login', { username
 export const reqAddUser = user => ajax(BASE + '/manage/user/add', user, 'POST')
 
 // 获取分类列表的接口
-export const reqCategory = parentId => ajax(BASE + '/manage/category/list', { parentId })
+export const reqCategorys = parentId => ajax(BASE + '/manage/category/list', { parentId })
 
 // 添加分类的接口
 export const reqAddCategory = (parentId, categoryName) => ajax(BASE + '/manage/category/add', { parentId, categoryName }, 'POST')
@@ -30,10 +30,16 @@ export const reqProducts = (pageNum, pageSize) => ajax(BASE + '/manage/product/l
 export const reqSearchProducts = ({ pageNum, pageSize, searchName, searchType }) => ajax(BASE + '/manage/product/search', { pageNum, pageSize, [searchType]: searchName })
 
 // 根据分类ID获取分类
-export const reqCategorys = categoryId => ajax(BASE + '/manage/category/info', { categoryId })
+export const reqCategory = categoryId => ajax(BASE + '/manage/category/info', { categoryId })
 
 // 对商品进行上下架处理
 export const reqUpdateStatus = (productId, status) => ajax(BASE + '/manage/product/updateStatus', { productId, status }, 'POST')
+
+// 删除图片的请求接口
+export const reqDeleteImg = (name) => ajax(BASE + '/manage/img/delete', { name }, 'POST')
+
+// 添加/修改商品的接口
+export const reqAddUpdateProduct = (product) => ajax(BASE + '/manage/product/' + (product._id ? 'update' : 'add'), product, 'POST')
 
 // jsonp请求的接口函数
 export const reqWeather = (city) => {

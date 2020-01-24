@@ -6,7 +6,7 @@ import formateDate from '../../utils/dateUtils'
 import { reqWeather } from '../../api/'
 import { withRouter } from 'react-router-dom'
 import menuList from '../../config/menuConfig'
-import { Modal,message } from 'antd'
+import { Modal, message } from 'antd'
 import LinkButton from '../link-button/index'
 
 class Header extends Component {
@@ -40,7 +40,7 @@ class Header extends Component {
       if (item.key === path) { // 当前item对象的key与path一样,item的title就是需要显示的title
         title = item.title
       } else if (item.children) {
-        const cItem = item.children.find(cItem => cItem.key === path) // 数组内层遍历
+        const cItem = item.children.find(cItem => path.indexOf(cItem.key) === 0) // 数组内层遍历
         if (cItem) {
           title = cItem.title
         }
@@ -64,7 +64,7 @@ class Header extends Component {
         this.props.history.replace('/login')
       },
       onCancel: () => {
-        message.info('已取消',1)
+        message.info('已取消', 1)
       }
     });
   }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Card, Table, Button, Icon, message, Modal } from 'antd'
 import LinkButton from '../../components/link-button'
-import { reqCategory, reqAddCategory, reqUpdateCategory } from '../../api'
+import { reqCategorys, reqAddCategory, reqUpdateCategory } from '../../api'
 import AddForm from './add-form'
 import UpdateForm from './update-form'
 
@@ -45,7 +45,7 @@ export default class Category extends Component {
     // 请求数据前显示loading
     this.setState({ loading: true })
     // 获取数据
-    const result = await reqCategory(parentId)
+    const result = await reqCategorys(parentId)
     // 得到响应数据时隐藏loading
     this.setState({ loading: false })
     if (result.status === 0) { // 请求成功
@@ -180,8 +180,8 @@ export default class Category extends Component {
       <span>
         <LinkButton onClick={this.showCategorys}>一级分类列表</LinkButton>
         <Icon
-          type="export"
-          style={{ fontSize: 20, margin: '0 10px', color: '#4E1FCF' }}
+          type="arrow-right"
+          style={{ fontSize: 16, margin: '0 10px', color: '#4E1FCF' }}
         />
         <span>{parentName}</span>
       </span>

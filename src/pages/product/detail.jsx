@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Card, Icon, List } from 'antd'
 import LinkButton from '../../components/link-button'
 import { BASE_IMG_URL } from '../../utils/constants'
-import { reqCategorys } from '../../api'
+import { reqCategory } from '../../api'
 
 const { Item } = List
 
@@ -15,15 +15,15 @@ export default class ProductDetail extends Component {
   getCategoryName = async () => {
     const { pCategoryId, categoryId } = this.props.location.state.product
     if (pCategoryId === '0') { // 一级分类下的商品
-      const result = await reqCategorys(categoryId)
+      const result = await reqCategory(categoryId)
       if (result.status === 0) {
         const cName1 = result.data.name
         this.setState({ cName1 })
       }
     } else { // 二级分类下的商品
       /*
-      const result1 = await reqCategorys(pCategoryId)
-      const result2 = await reqCategorys(categoryId)
+      const result1 = await reqCategory(pCategoryId)
+      const result2 = await reqCategory(categoryId)
       if (result1.status === 0 && result2.status === 0) {
         const cName1 = result1.data.name
         const cName2 = result2.data.name
@@ -32,7 +32,7 @@ export default class ProductDetail extends Component {
       */
 
       // 一次性发送多个请求,只有都成功才正常处理  Promise.all([p1,p2,...])
-      const results = await Promise.all([reqCategorys(pCategoryId), reqCategorys(categoryId)])
+      const results = await Promise.all([reqCategory(pCategoryId), reqCategory(categoryId)])
       if (results[0].status === 0 && results[1].status === 0) {
         const cName1 = results[0].data.name
         const cName2 = results[1].data.name
