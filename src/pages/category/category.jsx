@@ -212,6 +212,8 @@ export default class Category extends Component {
           visible={showStatus === 1} // visible接收一个布尔值，显示隐藏对话框
           onOk={this.addCategory}
           onCancel={this.handleCancel}
+          okText='确认'
+          cancelText='取消'
         >
           <AddForm
             categorys={categorys}
@@ -224,6 +226,8 @@ export default class Category extends Component {
           visible={showStatus === 2}
           onOk={this.updateCategory}
           onCancel={this.handleCancel}
+          okText='确认'
+          cancelText='取消'
         >
           <UpdateForm
             categoryName={category.name}

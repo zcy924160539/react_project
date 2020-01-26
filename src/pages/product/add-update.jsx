@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { Card, Form, Input, Cascader, Button, Icon, message } from 'antd'
 import { reqCategorys } from '../../api'
 import LinkButton from '../../components/link-button'
@@ -9,7 +9,7 @@ import { reqAddUpdateProduct } from '../../api'
 const { Item } = Form
 const { TextArea } = Input
 
-class ProductAddUpdate extends Component {
+class ProductAddUpdate extends PureComponent {
 
   state = {
     options: []

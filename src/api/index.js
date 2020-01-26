@@ -10,9 +10,6 @@ const BASE = '' // 空串代表从当前地址(http://localhost:3000)去向服�
 // 登录的请求函数
 export const reqLogin = (username, password) => ajax(BASE + '/login', { username, password }, 'POST')
 
-// 添加用户的请求函数
-export const reqAddUser = user => ajax(BASE + '/manage/user/add', user, 'POST')
-
 // 获取分类列表的接口
 export const reqCategorys = parentId => ajax(BASE + '/manage/category/list', { parentId })
 
@@ -36,14 +33,32 @@ export const reqCategory = categoryId => ajax(BASE + '/manage/category/info', { 
 export const reqUpdateStatus = (productId, status) => ajax(BASE + '/manage/product/updateStatus', { productId, status }, 'POST')
 
 // 删除图片的请求接口
-export const reqDeleteImg = (name) => ajax(BASE + '/manage/img/delete', { name }, 'POST')
+export const reqDeleteImg = name => ajax(BASE + '/manage/img/delete', { name }, 'POST')
 
 // 添加/修改商品的接口
-export const reqAddUpdateProduct = (product) => ajax(BASE + '/manage/product/' + (product._id ? 'update' : 'add'), product, 'POST')
+export const reqAddUpdateProduct = product => ajax(BASE + '/manage/product/' + (product._id ? 'update' : 'add'), product, 'POST')
+
+// 获取所有角色列表的接口
+export const reqRoles = () => ajax(BASE + '/manage/role/list')
+
+// 添加角色的函数
+export const reqAddRole = roleName => ajax(BASE + '/manage/role/add', { roleName }, 'POST')
+
+// 更新角色(给角色设置权限)的接口
+export const reqUpdateRole = role => ajax(BASE + '/manage/role/update', role, 'POST')
+
+// 获取用户信息列表的接口
+export const reqUsers = () => ajax(BASE + '/manage/user/list')
+
+// 删除指定用户的接口
+export const reqDeleteUser = userId => ajax(BASE + '/manage/user/delete', { userId }, 'POST')
+
+// 添加/更新用户
+export const reqAddOrUpdateUser = user => ajax(BASE + '/manage/user/' + (user._id ? 'update' : 'add'), user, 'POST')
 
 // jsonp请求的接口函数
-export const reqWeather = (city) => {
-  return new Promise((resolve) => {
+export const reqWeather = city => {
+  return new Promise(resolve => {
     const url = `http://api.map.baidu.com/telematics/v3/weather?location=${city}&output=json&ak=3p49MVra6urFRGOT9s8UBWr2`
     jsonp(url, {}, (err, data) => {
       if (!err && data.status === 'success') { // 成功
