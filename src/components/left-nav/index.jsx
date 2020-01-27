@@ -4,7 +4,6 @@ import './index.less'
 import logo from '../../assets/img/logo.png'
 import { Menu, Icon } from 'antd';
 import menuList from '../../config/menuConfig'
-// import memoryUtils from '../../utils/memoryUtils'
 import { connect } from 'react-redux'
 import { setHeadTitle } from '../../redux/actions'
 
@@ -84,7 +83,7 @@ class LeftNav extends Component {
     if (path.indexOf('/product') === 0) { // 当前请求的是商品或商品的子路由  str.indexOf(str2) === 0 str1以str2开头
       path = '/product'
     }
-    // console.log('render()', path)
+    
     return (
       <div>
         <div className='left-nav' >

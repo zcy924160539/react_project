@@ -2,9 +2,6 @@ import React, { Component } from 'react'
 import './login.less'
 import logo from '../../assets/img/logo.png'
 import { Form, Icon, Input, Button, message } from 'antd';
-// import { reqLogin } from '../../api'
-// import memoryUtils from '../../utils/memoryUtils'
-// import storageUtils from '../../utils/storageUtils'
 import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { login } from '../../redux/actions'
@@ -24,26 +21,8 @@ class Login extends Component {
       if (!error) { // 验证通过
         // console.log('validateFields', values)
         const { username, password } = values
+        // 登录
         this.props.login(username, password)
-        /*
-          // 提交登录的ajax请求
-          const result = await reqLogin(username, password)
-          if (result.status === 0) { // 账号和密码都输入正确,登陆成功
-            // 提示登陆成功
-            message.success('登陆成功', .5)
-            // 跳转页面前保存当前登录的user
-            const user = result.data
-            // 把user保存在内存中
-            memoryUtils.user = user
-            // 把user保存到localstorage中
-            storageUtils.saveUser(user)
-            // 跳转到管理界面(不需要回退回登录界面)
-            this.props.history.replace('/home')
-          } else { // 账号或密码输入错误,登录失败
-            // 提示错误信息
-            message.error(result.msg, 1)
-          }
-        */
       } else {
         message.error('校验失败', 1)
       }
@@ -53,7 +32,6 @@ class Login extends Component {
   // 对密码进行自定义验证的函数
   validatePwd = (rule, value, callback) => {
     // value读取的是用户的密码输入
-    // console.log(rule,value)    
     if (!value) {
       callback('请输入您的密码')
     } else if (value.length < 4) {
