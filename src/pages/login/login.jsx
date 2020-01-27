@@ -2,10 +2,13 @@ import React, { Component } from 'react'
 import './login.less'
 import logo from '../../assets/img/logo.png'
 import { Form, Icon, Input, Button, message } from 'antd';
-import { reqLogin } from '../../api'
-import memoryUtils from '../../utils/memoryUtils'
-import storageUtils from '../../utils/storageUtils'
+// import { reqLogin } from '../../api'
+// import memoryUtils from '../../utils/memoryUtils'
+// import storageUtils from '../../utils/storageUtils'
 import { Redirect } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { login } from '../../redux/actions'
+
 const { Item } = Form
 /*
 登录的路由组件
@@ -21,23 +24,26 @@ class Login extends Component {
       if (!error) { // 验证通过
         // console.log('validateFields', values)
         const { username, password } = values
-        // 提交登录的ajax请求
-        const result = await reqLogin(username, password)
-        if (result.status === 0) { // 账号和密码都输入正确,登陆成功
-          // 提示登陆成功
-          message.success('登陆成功', .5)
-          // 跳转页面前保存当前登录的user
-          const user = result.data
-          // 把user保存在内存中
-          memoryUtils.user = user
-          // 把user保存到localstorage中
-          storageUtils.saveUser(user)
-          // 跳转到管理界面(不需要回退回登录界面)
-          this.props.history.replace('/')
-        } else { // 账号或密码输入错误,登录失败
-          // 提示错误信息
-          message.error(result.msg, 1)
-        }
+        this.props.login(username, password)
+        /*
+          // 提交登录的ajax请求
+          const result = await reqLogin(username, password)
+          if (result.status === 0) { // 账号和密码都输入正确,登陆成功
+            // 提示登陆成功
+            message.success('登陆成功', .5)
+            // 跳转页面前保存当前登录的user
+            const user = result.data
+            // 把user保存在内存中
+            memoryUtils.user = user
+            // 把user保存到localstorage中
+            storageUtils.saveUser(user)
+            // 跳转到管理界面(不需要回退回登录界面)
+            this.props.history.replace('/home')
+          } else { // 账号或密码输入错误,登录失败
+            // 提示错误信息
+            message.error(result.msg, 1)
+          }
+        */
       } else {
         message.error('校验失败', 1)
       }
@@ -61,11 +67,15 @@ class Login extends Component {
     }
   }
   render() {
-    const user = memoryUtils.user
+    // const user = memoryUtils.user
+    const user = this.props.user
     if (user && user._id) {
       // 判断用户是否登录,如果已经登录,自动跳转到管理页面
-      return <Redirect to='/' />
+      return <Redirect to='/home' />
     }
+
+    const { errorMsg } = this.props.user
+
     // 得到form对象，用于搜集表单数据，前台校验表单等功能
     const { getFieldDecorator } = this.props.form
     return (
@@ -75,6 +85,9 @@ class Login extends Component {
           <h1>后台管理系统</h1>
         </header>
         <section className='login-content'>
+          <div className={errorMsg ? 'error-msg show' : 'error-msg'}>
+            {errorMsg}
+          </div>
           <h2>用户登录</h2>
           <Form onSubmit={this.handleSubmit} className="login-form">
             <Item>
@@ -122,4 +135,7 @@ class Login extends Component {
 }
 
 
-export default Form.create()(Login)
+export default Form.create()(connect(
+  state => ({ user: state.user }),
+  { login }
+)(Login))
