@@ -84,7 +84,7 @@ class Login extends Component {
                   { required: true, whitespace: true, message: '请输入您的账号' },
                   { min: 4, message: '账号不能小于4位' },
                   { max: 12, message: '账号不能超过12位' },
-                  { pattern: /^[a-z][A-z0-9_]*$/, message: '账号必须以小写字母开头' }
+                  { pattern: /^[A-z][A-z0-9_]*$/, message: '账号必须以字母开头' }
                 ],
                 initialValue: 'admin'
               })(

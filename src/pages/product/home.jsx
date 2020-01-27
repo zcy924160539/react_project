@@ -142,6 +142,7 @@ export default class ProductHome extends Component {
             defaultPageSize: PAGE_SIZE,
             showQuickJumper: true,
             total,
+            current:this.pageNum,
             onChange: this.getProducts // 分页时发请求,产生是对应的页码
           }}
         />

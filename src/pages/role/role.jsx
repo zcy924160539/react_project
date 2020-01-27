@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { Card, Button, Table, Modal, message } from 'antd'
 import { PAGE_SIZE } from '../../utils/constants'
 import { reqRoles, reqAddRole, reqUpdateRole } from '../../api'
@@ -6,11 +6,12 @@ import AddForm from './add-form'
 import AuthForm from './auth-form'
 import memoryUtils from '../../utils/memoryUtils'
 import formateDate from '../../utils/dateUtils'
+import storageUtils from '../../utils/storageUtils'
 
 /*
 用户路由
 */
-export default class User extends Component {
+export default class User extends PureComponent {
 
   constructor(props) {
     super(props)
@@ -102,9 +103,19 @@ export default class User extends Component {
     // 发请求更新角色(给角色设置权限)
     const result = await reqUpdateRole(role)
     if (result.status === 0) {
-      message.success('设置角色权限成功')
-      // 更新roles数组
-      this.getRoles()
+      // this.getRoles() 会多发一次请求
+      if (role._id === memoryUtils.user.role._id) {// 如果当前更新的是自己的权限,强制退出
+        memoryUtils.user = {}
+        storageUtils.removeUser()
+        this.props.history.replace('/login')
+        message.success('当前用户角色权限修改成功')
+      } else {
+        message.success('设置角色权限成功')
+        // 更新roles数组
+        this.setState({
+          roles: [...this.state.roles]
+        })
+      }
     } else {
       message.error('设置角色权限失败')
     }
@@ -146,7 +157,11 @@ export default class User extends Component {
           rowKey='_id'
           dataSource={roles}
           columns={this.columns}
-          rowSelection={{ type: 'radio', selectedRowKeys: [role._id] }} // 表格行是否可选择，selectedRowKeys设置选中与否
+          rowSelection={{
+            type: 'radio',
+            selectedRowKeys: [role._id],
+            onSelect: role => this.setState({ role }) // 选择某个radio时的回调
+          }} // 表格行是否可选择，selectedRowKeys设置选中与否
           pagination={{ defaultPageSize: PAGE_SIZE, showQuickJumper: true }}
           onRow={this.onRow}
         />
