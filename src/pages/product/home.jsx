@@ -3,6 +3,7 @@ import { Card, Button, Input, Select, Icon, Table, message } from 'antd'
 import LinkButton from '../../components/link-button'
 import { reqProducts, reqSearchProducts, reqUpdateStatus } from '../../api'
 import { PAGE_SIZE } from '../../utils/constants'
+import memoryUtils from '../../utils/memoryUtils'
 
 const { Option } = Select
 
@@ -56,12 +57,25 @@ export default class ProductHome extends Component {
         width: 80,
         render: product => (
           <span>
-            <LinkButton onClick={() => this.props.history.push('/product/detail', { product })}>详情</LinkButton>
-            <LinkButton onClick={() => this.props.history.push('/product/addupdate', product)}>修改</LinkButton>
+            <LinkButton onClick={() => this.showDetail(product)}>详情</LinkButton>
+            <LinkButton onClick={() => this.showUpdate(product)}>修改</LinkButton>
           </span>
         )
       }
     ];
+  }
+
+  // 显示产品详情页面
+  showDetail = (product) => {
+    // 缓存product ==>给detail组件使用
+    memoryUtils.product = product
+    this.props.history.push('/product/detail')
+  }
+
+  // 显示修改产品界面
+  showUpdate = (product) => {
+    memoryUtils.product = product
+    this.props.history.push('/product/addupdate')
   }
 
   getProducts = async pageNum => {
@@ -142,7 +156,7 @@ export default class ProductHome extends Component {
             defaultPageSize: PAGE_SIZE,
             showQuickJumper: true,
             total,
-            current:this.pageNum,
+            current: this.pageNum,
             onChange: this.getProducts // 分页时发请求,产生是对应的页码
           }}
         />
