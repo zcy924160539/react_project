@@ -72,8 +72,6 @@ export default class Category extends Component {
       parentId: category._id, // 父分类对象的id，就是子分类的parentId
       parentName: category.name
     }, () => { // 在状态更新且重新render后执行
-      // const { parentId } = this.state
-      // console.log(parentId)
       // 发请求获取二级分类列表
       this.getCategorys()
     })

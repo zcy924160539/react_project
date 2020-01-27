@@ -4,14 +4,15 @@ import { PAGE_SIZE } from '../../utils/constants'
 import { reqRoles, reqAddRole, reqUpdateRole } from '../../api'
 import AddForm from './add-form'
 import AuthForm from './auth-form'
-import memoryUtils from '../../utils/memoryUtils'
 import formateDate from '../../utils/dateUtils'
-import storageUtils from '../../utils/storageUtils'
+// import storageUtils from '../../utils/storageUtils'
+import { connect } from 'react-redux'
+import { logout } from '../../redux/actions'
 
 /*
 用户路由
 */
-export default class User extends PureComponent {
+class User extends PureComponent {
 
   constructor(props) {
     super(props)
@@ -98,16 +99,15 @@ export default class User extends PureComponent {
     const role = this.state.role
     // 得到最新的menus
     const menus = this.auth.current.getMenus()
+    const { user } = this.props
     role.menus = menus
-    role.auth_name = memoryUtils.user.username
+    role.auth_name = user.username
     // 发请求更新角色(给角色设置权限)
     const result = await reqUpdateRole(role)
     if (result.status === 0) {
       // this.getRoles() 会多发一次请求
-      if (role._id === memoryUtils.user.role._id) {// 如果当前更新的是自己的权限,强制退出
-        memoryUtils.user = {}
-        storageUtils.removeUser()
-        this.props.history.replace('/login')
+      if (role._id === user.role._id) {// 如果当前更新的是自己的权限,强制退出
+        this.props.logout()
         message.success('当前用户角色权限修改成功')
       } else {
         message.success('设置角色权限成功')
@@ -194,3 +194,8 @@ export default class User extends PureComponent {
     )
   }
 }
+
+export default connect(
+  state => ({ user: state.user }),
+  { logout }
+)(User)

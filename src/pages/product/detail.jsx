@@ -21,16 +21,6 @@ export default class ProductDetail extends Component {
         this.setState({ cName1 })
       }
     } else { // 二级分类下的商品
-      /*
-      const result1 = await reqCategory(pCategoryId)
-      const result2 = await reqCategory(categoryId)
-      if (result1.status === 0 && result2.status === 0) {
-        const cName1 = result1.data.name
-        const cName2 = result2.data.name
-        this.setState({ cName1, cName2 })
-      }(通过多个await的方式发送多个请求：后面的请求是在前一个成功后再去发送的,效率低)
-      */
-
       // 一次性发送多个请求,只有都成功才正常处理  Promise.all([p1,p2,...])
       const results = await Promise.all([reqCategory(pCategoryId), reqCategory(categoryId)])
       if (results[0].status === 0 && results[1].status === 0) {

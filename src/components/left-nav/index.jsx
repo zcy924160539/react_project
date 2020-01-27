@@ -4,16 +4,18 @@ import './index.less'
 import logo from '../../assets/img/logo.png'
 import { Menu, Icon } from 'antd';
 import menuList from '../../config/menuConfig'
-import memoryUtils from '../../utils/memoryUtils'
+import { connect } from 'react-redux'
+import { setHeadTitle } from '../../redux/actions'
 
-const { SubMenu } = Menu;
+const { SubMenu } = Menu
 
 class LeftNav extends Component {
   // 判断当前登录用户对item是否有权限
   hasAuth = item => {
     const { key, isPublic } = item
-    const menus = memoryUtils.user.role.menus
-    const username = memoryUtils.user.username
+    const {user} = this.props
+    const menus = user.role.menus
+    const username = user.username
     // 1. 当前用户是admin,全权限
     // 2. 当前用户有此item的权限:key有没有menus
     // 3. 如果当前item是公开的
@@ -28,20 +30,25 @@ class LeftNav extends Component {
 
   // 使用递归和数组的reduce方法,根据menuList的数据数组生成对应的标签数组
   getMenuNodes = menuList => {
+    const path = this.props.location.pathname
     return menuList.reduce((per, item) => {
       // 如果当前用户有item对应的权限才去添加对应的item
       if (this.hasAuth(item)) {
         if (!item.children) { // 没有子菜单
+          // 判断item是否是当前对应的item
+          if (item.key === path || path.indexOf(item.key) === 0) {
+            // 更新redux中的headTitle状态
+            this.props.setHeadTitle(item.title)
+          }
           per.push((
             <Menu.Item key={item.key}>
-              <Link to={item.key}>
+              <Link to={item.key} onClick={() => this.props.setHeadTitle(item.title)}>
                 <Icon type={item.icon} />
                 <span>{item.title}</span>
               </Link>
             </Menu.Item>
           ))
         } else { // 有子菜单
-          const path = this.props.location.pathname
           // 查找一个与当前路径匹配的子item
           const cItem = item.children.find(cItem => path.indexOf(cItem.key) === 0) // str.indexOf(str2) === 0 str1以str2开头
           if (cItem) {// cItem如果存在,说明当前item的子列表需要打开
@@ -76,7 +83,7 @@ class LeftNav extends Component {
     if (path.indexOf('/product') === 0) { // 当前请求的是商品或商品的子路由  str.indexOf(str2) === 0 str1以str2开头
       path = '/product'
     }
-    // console.log('render()', path)
+    
     return (
       <div>
         <div className='left-nav' >
@@ -99,4 +106,7 @@ class LeftNav extends Component {
 }
 
 // withRouter(非路由组件), 使得非路由组件也可以拥有路由组件的history,location,match三个属性 
-export default withRouter(LeftNav)
+export default withRouter(connect(
+  state => ({ user: state.user }),
+  { setHeadTitle }
+)(LeftNav))

@@ -68,6 +68,7 @@ class UserForm extends PureComponent {
             initialValue: user.email,
             rules: [
               { required: true, whitespace: true, message: '邮箱必须输入' },
+              // eslint-disable-next-line
               { pattern: /^([A-z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/, message: '请输入合法的邮箱' }
             ]
           })(
