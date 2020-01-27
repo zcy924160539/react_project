@@ -1,12 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+/*
+入口文件
+*/
+import React from 'react'
+import { render } from 'react-dom'
+import App from './App'
+// 当前localstorage中存储的user
+import storageUtils from './utils/storageUtils'
+import memoryUtils from './utils/memoryUtils'
 
-ReactDOM.render(<App />, document.getElementById('root'));
+// 一开始就把localstorage中的user读取到内存中(维持登录功能)
+memoryUtils.user = storageUtils.getUser()
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+render(<App />,document.getElementById('root'))
