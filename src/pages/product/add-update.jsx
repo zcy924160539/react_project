@@ -5,6 +5,7 @@ import LinkButton from '../../components/link-button'
 import PicturesWall from './pictures-wall'
 import RichTextEditor from './rich-text-editor'
 import { reqAddUpdateProduct } from '../../api'
+import memoryUtils from '../../utils/memoryUtils'
 
 const { Item } = Form
 const { TextArea } = Input
@@ -149,15 +150,20 @@ class ProductAddUpdate extends PureComponent {
 
   UNSAFE_componentWillMount() {
     // 取出点击时携带过来的state
-    const product = this.props.location.state
+    const product = memoryUtils.product
     // 保存是否是更新的标识
-    this.isUpdate = !!product // 强制转换布尔类型
-    // 保存商品(如果没有,保存的是{})
+    this.isUpdate = !!product._id // 强制转换布尔类型
     this.product = product || {}
+    // 保存商品(如果没有,保存的是{})
   }
 
   componentDidMount() {
     this.getCategorys('0')
+  }
+
+  // 组件卸载前清除保存数据的
+  componentWillUnmount() {
+    memoryUtils.product = {}
   }
 
   render() {
